@@ -1,5 +1,5 @@
-# EEG-artifact-rejection
-<i>Reject artifact EEG data using supervised machine learning techniques (e.g., Isolation Forest).</i>i>
+# EEG Artifact Rejection
+*Reject artifact EEG data using supervised machine learning techniques (e.g., Isolation Forest).*
 
 
 ## Usage
