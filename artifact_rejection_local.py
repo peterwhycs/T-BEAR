@@ -7,22 +7,22 @@ from sklearn.ensemble import IsolationForest
 if __name__ == '__main__':
 	file_path = str(Path(r'/Users/peter/EEG-artifact-rejection/eeg-data/ANTT_104/ANTT_104_SR_bb_epoch.set'))
 
-	# Load .set file depending on if it's epoched.
+	# Load .set file depending on if it's epoched
 	try:
 		epochs = mne.io.read_epochs_eeglab(file_path)  # Epoched
 	except:
-		epochs = mne.io.read_raw_eeglab(file_path)  # Not epoched (yet).
+		epochs = mne.io.read_raw_eeglab(file_path)  # Not epoched (yet)
 
-	# Set up and clean the DataFrame.
+	# Set up and clean the DataFrame
 	df = epochs.to_data_frame()
-	columns, df = sorted(list(df.columns)), df.reset_index()  # Sort columns in alphabetical order.
+	columns, df = sorted(list(df.columns)), df.reset_index()  # Sort columns in alphabetical order
 
 	try:
-		df = df.drop(['condition'], axis=1)  # Check and drop 'condition' column.
+		df = df.drop(['condition'], axis=1)  # Check and drop 'condition' column
 	except:
 		pass
 
-	# Reconstruct the columns with 'time' first, followed by other (alpha-ordered) columns.
+	# Reconstruct the columns with 'time' first, followed by other (alpha-ordered) columns
 	cleaned_columns = ['time']
 	if 'epoch' in list(df.columns):
 		cleaned_columns += ['epoch']
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 	df_ = df.copy()
 	value_columns = list(df.columns)
 
-	# Remove any time, non-value columns to prep data for IForest.
+	# Remove any time, non-value columns to prep data for IForest
 	try:
 		if 'time' in value_columns:
 			value_columns.remove('time')
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 	except:
 		pass
 
-	df_values = df_[value_columns]  # Only values; numpy array.
+	df_values = df_[value_columns]  # Only values; numpy array
 
 	# Run IForest:
 	X = df_values
