@@ -1,0 +1,17 @@
+[[source]]
+verify_ssl = true
+url = "https://pypi.org/simple"
+name = "pypi"
+
+[dev-packages]
+
+[packages]
+numpy = "*"
+scipy = "*"
+pandas = "*"
+plotly = "*"
+sklearn = "*"
+mne = "*"
+
+[requires]
+python_version = "3.5"
