@@ -12,6 +12,8 @@ pandas = "*"
 plotly = "*"
 sklearn = "*"
 mne = "*"
+jupyter = "*"
+ipykernel = "*"
 
 [requires]
 python_version = "3.5"
