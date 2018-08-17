@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+[requires]
+python_version = "3.5"
+
+[packages]
+scipy = "*"
+pandas = "*"
+scikit-learn = "*"
+sklearn = "*"
+tensorflow = "*"
+nltk = "*"
+mne = "*"
+ipykernel = "*"
+jupyter = "*"
+notebook = "*"
