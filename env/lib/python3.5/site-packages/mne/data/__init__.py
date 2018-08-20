@@ -1,1 +1,0 @@
-"""MNE-Python data."""
