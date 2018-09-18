@@ -5,4 +5,5 @@
 ## Usage
 
 This ongoing process explores the efficacy of using an Isolation Forest (supervised) to detect artifacts in EEG data and possibly other time series.
-    - [Isolation Forest](https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)
+  - [Isolation Forest](https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)
+  
