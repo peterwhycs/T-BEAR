@@ -1,6 +1,6 @@
 # EEG Artifact Rejection
 
-The Juyter notebook(s) and script(s) in the EEG-artifact-rejection are prototypes for a more automated process in detecting and rejecting EEG artifacts.
+The Juyter notebook(s) and script(s) in *EEG-artifact-rejection* are prototypes for a more automated process in detecting and rejecting EEG artifacts.
 
 ## Usage
 
