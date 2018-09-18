@@ -1,4 +1,4 @@
-eeg-data/**
-/EEG_py3_env
 /.DS_Store
 /.ipynb_checkpoints
+/EEG_py3_env
+eeg-data/**
