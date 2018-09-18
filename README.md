@@ -4,7 +4,7 @@ The Juyter notebook(s) and script(s) in *EEG-artifact-rejection* are prototypes 
 
 ## Usage
 
-This ongoing process explores the efficacy of using an Isolation Forest (supervised) to detect artifacts in EEG data and possibly other time series.
+This ongoing process explores the efficacy of using SVM and Isolation Forest to detect artifacts in EEG data and possibly other time series.
 
 ## Background Info and Research
 ### Research
