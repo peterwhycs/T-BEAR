@@ -15,10 +15,11 @@ warnings.filterwarnings('ignore')
 
 
 def main():
+    print('Executing main function...')
     # Set file paths:
-    file_path = str(Path(r'eeg-data/601/Rew_601_rest_bb_epoch.set'))
-    mat_reject = str(Path(r'eeg-data/601/Rew_601_rest_reject_rmm.mat'))
-    mat_stage = str(Path(r'eeg-data/601/Rew_601_rest_stages.mat'))
+    file_path = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/eeg-data/601/Rew_601_rest_bb_epoch.set'))
+    mat_reject = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/eeg-data/601/Rew_601_rest_reject_rmm.mat'))
+    mat_stage = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/eeg-data/601/Rew_601_rest_stages.mat'))
 
     # Load epochs file:
     try:
