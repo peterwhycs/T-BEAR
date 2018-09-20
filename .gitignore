@@ -2,5 +2,6 @@
 /.DS_Store
 /.ipynb_checkpoints
 artifact-rejection/eeg-data
+artifact-rejection/eeg-data.zip
 eeg-data.zip
 eeg-data/**
