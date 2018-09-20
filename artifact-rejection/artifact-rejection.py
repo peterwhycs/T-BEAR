@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import warnings
+from pathlib import Path, PureWindowsPath
+
+import matplotlib.pyplot as plt
+import mne
+import numpy as np
+import pandas as pd
+import scipy.io
+from sklearn.ensemble import IsolationForest
+warnings.filterwarnings('ignore')
+
+
 def main():
-    import warnings
-    from pathlib import Path, PureWindowsPath
-
-    import matplotlib.pyplot as plt
-    import mne
-    import numpy as np
-    import pandas as pd
-    import scipy.io
-    from sklearn.ensemble import IsolationForest
-    warnings.filterwarnings('ignore')
-
     # Set file paths:
     print("Loading file paths...")
     file_path = str(Path(r'eeg-data/601/Rew_601_rest_bb_epoch.set'))
