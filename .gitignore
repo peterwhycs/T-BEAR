@@ -1,4 +1,5 @@
 */.ipynb_checkpoints/*
 /.DS_Store
 /.ipynb_checkpoints
+artifact-rejection/eeg-data
 eeg-data/**
