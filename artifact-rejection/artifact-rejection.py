@@ -16,12 +16,10 @@ warnings.filterwarnings('ignore')
 def main():
     # Set file paths:
     print("Loading file paths...")
-
     file_path = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_bb_epoch.set'))
     mat_reject = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_reject_rmm.mat'))
     mat_stage = str(Path(r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_stages.mat'))
-
-    print("Loaded file paths sucessfully!\n")
+    print("Loaded file paths successfully!\n")
 
     # Load epochs file:
     print("Loading files...")
@@ -30,7 +28,7 @@ def main():
     except:
         epochs = mne.io.read_raw_eeglab(file_path)
 
-    # Load sleep stages & reject files:
+    # Load sleep stages & other files:
     try:
         sleep_file = scipy.io.loadmat(mat_stage)
         sleep = sleep_file['stages'].flatten()
@@ -39,12 +37,10 @@ def main():
     finally:
         reject_file = scipy.io.loadmat(mat_reject)
         reject = reject_file['reject'].flatten()
-
-    print("Loaded files sucessfully!\n")
+    print("Loaded files successfully!\n")
 
     # Convert to and clean DataFrame:
-    print("Data cleaning...")
-
+    print("Cleaning data...")
     df = epochs.to_data_frame()
     columns, df = sorted(list(df.columns)), df.reset_index()
 
@@ -60,8 +56,7 @@ def main():
     cleaned_columns += columns
     df = df[cleaned_columns]
     df_ = df.copy()
-
-    print("Data cleaned successfully!\n")
+    print("Cleaned data successfully!\n")
 
     # Select values from columns for IForest:
     print("Preparing data for IForest algorithm...")
@@ -76,7 +71,7 @@ def main():
         pass
 
     df_values = df_[value_columns]
-    print("Data prepared sucessfully!\n")
+    print("Data prepared successfully!\n")
 
     # Run IForest:
     print("Running IForest algorithm...")
@@ -92,9 +87,9 @@ def main():
     total_pts = count_train[1][1], count_test[1][1]
     total_artifacts = np.count_nonzero(reject)
     accuracy_percent = num_artifacts / total_artifacts * 100
+    print("IForest algorithm ran successfully!\n")
 
-    print("IForest algorithm completed!\n")
-    print(f"Performance: {accuracy_percent} %")
+    print(f"Performance: {accuracy_percent}%")
     print(f"{num_artifacts} artifacts detected out of {total_artifacts} artifacts total.")
 
 
