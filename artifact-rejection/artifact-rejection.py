@@ -2,7 +2,8 @@
 # coding: utf-8
 
 import warnings
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
+warnings.filterwarnings('ignore')
 
 import matplotlib.pyplot as plt
 import mne
@@ -10,7 +11,6 @@ import numpy as np
 import pandas as pd
 import scipy.io
 from sklearn.ensemble import IsolationForest
-warnings.filterwarnings('ignore')
 
 
 def main():
