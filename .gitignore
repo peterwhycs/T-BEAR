@@ -1,6 +1,8 @@
 */.ipynb_checkpoints/*
 /.DS_Store
 /.ipynb_checkpoints
+Pipfile
+Pipfile.lock
 artifact-rejection/eeg-data
 artifact-rejection/eeg-data.zip
 eeg-data.zip
