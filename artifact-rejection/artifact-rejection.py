@@ -15,10 +15,19 @@ def main():
     mat_stage = str(Path(
         r'eeg-data/601/Rew_601_rest_stages.mat'))
 
-    files = load_subject_files(file_path, mat_reject, mat_stage)
-    epochs = files[0]
+    files = load_subject_dir(file_path, mat_reject, mat_stage)
+    epochs = files['epochs']
+    
+    try:
+        reject = files['reject']
+    except:
+        pass
 
-    # Convert to and clean DataFrame:
+    try:
+        sleep_stages = files['stages']
+    except:
+        pass
+
     print("Cleaning data...")
     df = epochs.to_data_frame()
     columns, df = sorted(list(df.columns)), df.reset_index()
