@@ -12,20 +12,16 @@ def main():
     mat_reject = Path('eeg-data/601/Rew_601_rest_reject_rmm.mat')
     mat_stage = Path('eeg-data/601/Rew_601_rest_stages.mat')
 
-    win_file_path = PureWindowsPath(file_path)
-    win_mat_reject = PureWindowsPath(mat_reject)
-    win_mat_stage = PureWindowsPath(mat_stage)
-
     files = load_subject_dir(file_path, mat_reject, mat_stage)
-    epochs = files['epochs']
 
+    epochs = files['epoch']
     try:
         reject = files['reject']
     except:
         pass
 
     try:
-        sleep_stages = files['stages']
+        stages = files['stages']
     except:
         pass
 
