@@ -1,5 +1,5 @@
 import warnings
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 import mne
 import numpy as np
@@ -10,14 +10,14 @@ from sklearn.ensemble import IsolationForest
 warnings.filterwarnings('ignore')
 
 
-def load_subject_dir(file_path, mat_stage, mat_reject):
+def load_subject_dir(file_path, mat_reject, mat_stage):
     """Loads file paths for EEG data and MATLAB auxiliaries.
-    
+
     Arguments:
         file_path (str): The file path to the .set file.
         mat_stage (str): The file path to the MATLAB file with sleep stages.
         mat_reject (str): The file path to the MATLAB file/array with labels for epoch rejects.
-    
+
     Returns:
         dict: Returns a dictionary containing all files that did not error.
 
@@ -62,4 +62,3 @@ def load_subject_dir(file_path, mat_stage, mat_reject):
         print("NOTE: Reject file was not found.")
 
     return files
-    
