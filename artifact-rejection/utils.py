@@ -62,6 +62,4 @@ def load_subject_dir(file_path, mat_stage, mat_reject):
         print("NOTE: Reject file was not found.")
 
     return files
-
-    def clean_dataframe(df):
-        df_ = df.copy()
+    
