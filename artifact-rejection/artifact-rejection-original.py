@@ -3,21 +3,29 @@
 
 from utils import *
 
-warnings.filterwarnings('ignore')
-
 
 def main():
-    # Set file paths
+    # Set file paths:
+    print("Loading file paths...")
     file_path = str(Path(
-        r'eeg-data/601/Rew_601_rest_bb_epoch.set'))
+        r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_bb_epoch.set'))
     mat_reject = str(Path(
-        r'eeg-data/601/Rew_601_rest_reject_rmm.mat'))
+        r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_reject_rmm.mat'))
     mat_stage = str(Path(
-        r'eeg-data/601/Rew_601_rest_stages.mat'))
+        r'/home/walker/peterwhy/git-repo/EEG-artifact-rejection/artifact-rejection/eeg-data/601/Rew_601_rest_stages.mat'))
+    print("Loaded file paths successfully!\n")
 
-    files = load_subject_files(file_path, mat_reject, mat_stage)
-    epochs = files[0]
+    # Load epochs file:
+    print("Loading files...")
+    try:
+        epochs = mne.io.read_epochs_eeglab(file_path)
+    except:
+        epochs = mne.io.read_raw_eeglab(file_path)
+    print("Loaded files successfully!\n")
 
+    ###
+    # Insert function#
+    ###
     # Convert to and clean DataFrame:
     print("Cleaning data...")
     df = epochs.to_data_frame()
@@ -58,8 +66,7 @@ def main():
     clfIF = IsolationForest(random_state=42, contamination=0.00001, n_jobs=3)
     clfIF.fit(X)
     pred_train, pred_test = clfIF.predict(X), clfIF.predict(X)
-    count_train, count_test = np.unique(
-        ar=pred_train, return_counts=True), np.unique(ar=pred_test, return_counts=True)
+    count_train, count_test = np.unique(ar=pred_train, return_counts=True), np.unique(ar=pred_test, return_counts=True)
     index_train, index_test = [i for i, x in enumerate(pred_train) if x == -1], [i for i, x in enumerate(pred_test) if
                                                                                  x == -1]
     df_IF = df_.loc[index_test]
