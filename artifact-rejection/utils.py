@@ -10,29 +10,46 @@ from sklearn.ensemble import IsolationForest
 warnings.filterwarnings('ignore')
 
 
-def load_subject_files(file_path, mat_stage, mat_reject):
-    # Load sleep stages & other files:
-    files = list()
+def load_subject_dir(file_path, mat_stage, mat_reject):
+    """Loads file paths for EEG data and MATLAB auxiliaries.
+    
+    Arguments:
+        file_path (str): The file path to the .set file.
+        mat_stage (str): The file path to the MATLAB file with sleep stages.
+        mat_reject (str): The file path to the MATLAB file/array with labels for epoch rejects.
+    
+    Returns:
+        dict: Returns a dictionary containing all files that did not error.
+
+    Examples:
+        >>> files = load_subject_dir(file_path, mat_stage, mat_reject)
+        >>> files.keys()
+        dict_keys(['epochs', 'stages', 'reject'])
+    """
+
+    files = dict()
     found_set, found_sleep, found_reject = True, True, True
     try:
-        epochs = mne.io.read_epochs_eeglab(file_path)
+        set_file = mne.io.read_epochs_eeglab(file_path)
+        files['epochs'] = set_file
     except:
-        epochs = mne.io.read_raw_eeglab(file_path)
+        set_file = mne.io.read_raw_eeglab(file_path)
+        files['epochs'] = set_file
     else:
         pass
 
     try:
         sleep_file = loadmat(mat_stage)
         sleep = sleep_file['stages'].flatten()
-        files += sleep
+        files['stages'] = sleep
     except FileNotFoundError:
         found_sleep = False
         pass
 
     try:
         reject_file = loadmat(mat_reject)
-        reject = reject_file['reject'].flatten()
-        files += reject
+        rejects = reject_file['reject'].flatten()
+        files['reject'] = rejects
     except FileNotFoundError:
         found_reject = False
         pass
@@ -45,3 +62,6 @@ def load_subject_files(file_path, mat_stage, mat_reject):
         print("NOTE: Reject file was not found.")
 
     return files
+
+    def clean_dataframe(df):
+        df_ = df.copy()
