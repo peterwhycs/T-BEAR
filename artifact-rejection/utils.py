@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage):
-    """Loads file paths for EEG data and MATLAB auxiliaries.
+    """Loads file paths for EEG data and MATLAB auxiliaries and returns those files.
 
     Arguments:
         file_path (str): The file path to the .set file.
