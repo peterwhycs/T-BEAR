@@ -70,7 +70,7 @@ def main():
     # IForest:
     print("Running IForest algorithm...")
     X = df_values
-    clfIF = IsolationForest(random_state=42, n_jobs=2)
+    clfIF = IsolationForest(random_state=42, n_jobs=3)
     clfIF.fit(X)
 
     pred_artifacts = clfIF.predict(X)
