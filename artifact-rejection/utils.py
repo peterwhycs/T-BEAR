@@ -1,13 +1,17 @@
 import warnings
 from pathlib import Path, PureWindowsPath
+warnings.filterwarnings('ignore')
 
+import matplotlib.pyplot as plt
 import mne
 import numpy as np
 import pandas as pd
+from matplotlib import style
 from scipy.io import loadmat
+from sklearn import svm
 from sklearn.ensemble import IsolationForest
-
-warnings.filterwarnings('ignore')
+from sklearn.metrics import classification_report
+style.use("ggplot")
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage):
@@ -26,7 +30,6 @@ def load_subject_dir(file_path, mat_reject, mat_stage):
         >>> files.keys()
         dict_keys(['epochs', 'stages', 'reject'])
     """
-
     files = dict()
     found_set, found_sleep, found_reject = True, True, True
     try:

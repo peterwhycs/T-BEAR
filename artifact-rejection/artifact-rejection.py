@@ -3,8 +3,6 @@
 
 from utils import *
 
-warnings.filterwarnings('ignore')
-
 
 def main():
     # Set file paths
@@ -14,7 +12,7 @@ def main():
 
     files = load_subject_dir(file_path, mat_reject, mat_stage)
 
-    epochs = files['epoch']
+    epochs = files['epochs']
     try:
         reject = files['reject']
     except:
