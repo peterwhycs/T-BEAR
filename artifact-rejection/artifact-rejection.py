@@ -6,9 +6,9 @@ from utils import *
 
 def main():
     # Set file paths
-    file_path = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_bb_epoch.set')
-    mat_reject = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_reject_rmm.mat')
-    mat_stage = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_stages.mat')
+    file_path = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_bb_epoch.set')
+    mat_reject = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_reject_rmm.mat')
+    mat_stage = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_stages.mat')
     files = load_subject_dir(file_path, mat_reject, mat_stage)
     epochs = files['epochs']
 
