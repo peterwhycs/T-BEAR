@@ -6,20 +6,18 @@ from utils import *
 
 def main():
     # Set file paths
-    file_path = Path('eeg-data/601/Rew_601_rest_bb_epoch.set')
-    mat_reject = Path('eeg-data/601/Rew_601_rest_reject_rmm.mat')
-    mat_stage = Path('eeg-data/601/Rew_601_rest_stages.mat')
-
-    files = load_subject_dir(file_path, mat_reject, mat_stage)
-
+    file_path = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_bb_epoch.set')
+    mat_reject = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_reject_rmm.mat')
+    mat_stage = Path('eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_stages.mat')
     epochs = files['epochs']
+
     try:
-        reject = files['reject']
+        reject = list(files['reject'])
     except:
         pass
 
     try:
-        stages = files['stages']
+        stages = list(files['stages'])
     except:
         pass
 
@@ -38,11 +36,17 @@ def main():
 
     cleaned_columns += columns
     df = df[cleaned_columns]
+
+    try: 
+        df[['time', 'epoch']] = df[['time', 'epoch']].astype(int)
+    except:
+        pass
+
     df_ = df.copy()
     print("Cleaned data successfully!\n")
 
     # Select values from columns for IForest:
-    print("Preparing data for IForest algorithm...")
+    print("Preparing data for classification...")
     value_columns = list(df.columns)
 
     try:
@@ -56,25 +60,32 @@ def main():
     df_values = df_[value_columns]
     print("Data prepared successfully!\n")
 
-    # Run IForest:
+    # # SVM Classifier:
+    # print("Running SVM Classifier..")
+    # X_train, y_train = df_values, reject
+    # clfSVC = svm.SVC(kernel='linear', C = 1.0)
+    # clfSVC.fit(X_train, y_train)
+
+    # IForest:
     print("Running IForest algorithm...")
     X = df_values
-    clfIF = IsolationForest(random_state=42, contamination=0.00001, n_jobs=3)
+    clfIF = IsolationForest(random_state=42, n_jobs=2)
     clfIF.fit(X)
-    pred_train, pred_test = clfIF.predict(X), clfIF.predict(X)
-    count_train, count_test = np.unique(
-        ar=pred_train, return_counts=True), np.unique(ar=pred_test, return_counts=True)
-    index_train, index_test = [i for i, x in enumerate(pred_train) if x == -1], [i for i, x in enumerate(pred_test) if
-                                                                                 x == -1]
-    df_IF = df_.loc[index_test]
-    num_artifacts_pair = count_train[1][0], count_test[1][0]
-    num_artifacts = num_artifacts_pair[1]
-    total_pts = count_train[1][1], count_test[1][1]
-    total_artifacts = np.count_nonzero(reject)
-    accuracy_percent = num_artifacts / total_artifacts * 100
-    print("IForest algorithm ran successfully!\n")
 
-    print(f"Performance: {accuracy_percent}%")
+    pred_artifacts = clfIF.predict(X)
+    count_artifacts = np.unique(ar=pred_artifacts, return_counts=True)
+    index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
+
+    df_IF = df_.loc[index_artifacts]
+    df_IF_epochs = set(df_IF['epoch'])
+    print(df_IF_epochs)
+
+    num_artifacts_pair = count_artifacts[1][0]
+    num_artifacts = num_artifacts_pair[1]
+
+    total_pts = count_artifacts[1][1]
+    total_artifacts = np.count_nonzero(reject)
+    print("IForest algorithm ran successfully!\n")
     print(f"{num_artifacts} artifacts detected out of {total_artifacts} artifacts total.")
 
 
