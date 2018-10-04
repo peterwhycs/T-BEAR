@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import utilities as utils
+from utilities import *
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     file_path = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_bb_epoch.set')
     mat_reject = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_reject_rmm.mat')
     mat_stage = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_stages.mat')
-    files = utils.load_subject_dir(file_path, mat_reject, mat_stage)
+    files = load_subject_dir(file_path, mat_reject, mat_stage)
     epochs = files['epochs']
 
     try:

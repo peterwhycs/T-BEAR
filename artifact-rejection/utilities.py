@@ -1,5 +1,5 @@
 import warnings
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 warnings.filterwarnings('ignore')
 
 import matplotlib.pyplot as plt
