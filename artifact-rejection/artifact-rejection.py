@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from utils import *
+import utilities as utils
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     file_path = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_bb_epoch.set')
     mat_reject = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_reject_rmm.mat')
     mat_stage = Path('/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie/Rew_601_rest/Rew_601_rest_stages.mat')
-    files = load_subject_dir(file_path, mat_reject, mat_stage)
+    files = utils.load_subject_dir(file_path, mat_reject, mat_stage)
     epochs = files['epochs']
 
     try:
@@ -82,7 +82,7 @@ def main():
     print(df_IF_epochs)
 
     num_artifacts_pair = count_artifacts[1][0]
-    num_artifacts = num_artifacts_pair[1]
+    num_artifacts = num_artifacts_pair[1][1]
 
     total_pts = count_artifacts[1][1]
     total_artifacts = np.count_nonzero(reject)
