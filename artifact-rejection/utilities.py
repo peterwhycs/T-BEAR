@@ -10,7 +10,7 @@ from matplotlib import style
 from scipy.io import loadmat
 from sklearn import svm
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score, classification_report
 style.use("ggplot")
 
 
@@ -52,7 +52,8 @@ def load_subject_dir(file_path, mat_reject, mat_stage):
     try:
         reject_file = loadmat(mat_reject)
         rejects = reject_file['reject'].flatten()
-        files['reject'] = rejects
+        rejects_ = resize_reject(rejects)
+        files['reject'] = rejects_
     except FileNotFoundError:
         found_reject = False
         pass
@@ -65,3 +66,59 @@ def load_subject_dir(file_path, mat_reject, mat_stage):
         print("NOTE: Reject file was not found.")
 
     return files
+
+
+def clean_df(df):
+    """Cleans dataframe by reseting index, deleting non-essential features, etc.
+
+    Arguments:
+        df (DataFrame): The freshly converted dataframe.
+
+    Returns:
+        DataFrame: Returns a dataframe containing all files that did not error.
+    """
+    print("Cleaning data...")
+
+    try:
+        df = df.drop(['condition'], axis=1)
+    except:
+        pass
+
+    columns, df = sorted(list(df.columns)), df.reset_index()
+    cleaned_columns = ['time']
+    if 'epoch' in list(df.columns):
+        cleaned_columns += ['epoch']
+
+    cleaned_columns += columns
+    df = df[cleaned_columns]
+
+    try:
+        df[['time', 'epoch']] = df[['time', 'epoch']].astype(int)
+    except:
+        pass
+
+    print("Cleaned data successfully!\n")
+    return df
+
+
+def resize_reject(reject_array, r=2000):
+    repeated_reject_array = np.repeat(reject_array, r)
+    return repeated_reject_array
+
+
+def extract_df_values(df):
+    df_ = df.copy()
+    print("Preparing data for classification...")
+    value_columns = list(df.columns)
+
+    try:
+        if 'time' in value_columns:
+            value_columns.remove('time')
+        if 'epoch' in value_columns:
+            value_columns.remove('epoch')
+    except:
+        pass
+
+    df_values = df_[value_columns]
+    print("Data prepared successfully!\n")
+    return df_values
