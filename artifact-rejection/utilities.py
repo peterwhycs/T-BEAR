@@ -1,6 +1,4 @@
-import warnings
 from pathlib import Path
-warnings.filterwarnings('ignore')
 
 import matplotlib.pyplot as plt
 import mne
