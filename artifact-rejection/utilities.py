@@ -1,15 +1,16 @@
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
 import pandas as pd
-
 from matplotlib import style
-from pathlib import Path
 from scipy.io import loadmat
 from sklearn import svm
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
+
 style.use("ggplot")
 
 
@@ -122,8 +123,12 @@ def extract_df_values(df):
     print("Data prepared successfully!\n")
     return df_values
 
-def run_IForest(df_, df_values, reject):
+
+def run_IForest(df, df_, reject):
     print("Running IForest algorithm...")
+
+    # Select values from dataframe
+    df_values = extract_df_values(df)
     X = df_values
     clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001,
                             bootstrap=False, n_jobs=3, random_state=42, verbose=1)
@@ -144,3 +149,15 @@ def run_IForest(df_, df_values, reject):
     total_artifacts = np.count_nonzero(reject)
     print("IForest algorithm ran successfully!\n")
     print(set(df_IF['epoch']))
+
+
+def run_SVM(df, reject):
+    df_values = extract_df_values(df)
+    # SVM Classifier:
+    print("Running SVM Classifier..")
+    X_train, y_train = df_values, reject
+    clfSVC = svm.SVC(kernel='linear', C=1.0)
+    clfSVC.fit(X_train, y_train)
+    y_pred = clfSVC.predict(X_train)
+    acc_score = accuracy_score(y_train, y_pred)
+    print('Accuracy Score:', acc_score)
