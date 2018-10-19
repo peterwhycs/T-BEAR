@@ -122,7 +122,7 @@ def extract_df_values(df):
     print("Data prepared successfully!\n")
     return df_values
 
-def run_IForest(df_values):
+def run_IForest(df_, df_values, reject):
     print("Running IForest algorithm...")
     X = df_values
     clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001,
