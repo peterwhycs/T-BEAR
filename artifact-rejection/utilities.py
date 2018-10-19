@@ -1,14 +1,15 @@
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
 import pandas as pd
+
 from matplotlib import style
+from pathlib import Path
 from scipy.io import loadmat
 from sklearn import svm
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 style.use("ggplot")
 
 
@@ -120,3 +121,26 @@ def extract_df_values(df):
     df_values = df_[value_columns]
     print("Data prepared successfully!\n")
     return df_values
+
+def run_IForest(df_values):
+    print("Running IForest algorithm...")
+    X = df_values
+    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001,
+                            bootstrap=False, n_jobs=3, random_state=42, verbose=1)
+    clfIF.fit(X)
+
+    pred_artifacts = clfIF.predict(X)
+    count_artifacts = np.unique(ar=pred_artifacts, return_counts=True)
+    index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
+
+    df_IF = df_.loc[index_artifacts]
+    df_IF_epochs = set(df_IF['epoch'])
+    print(df_IF_epochs)
+
+    num_artifacts_pair = count_artifacts[1][0]
+    num_artifacts = num_artifacts_pair[1][1]
+
+    total_pts = count_artifacts[1][1]
+    total_artifacts = np.count_nonzero(reject)
+    print("IForest algorithm ran successfully!\n")
+    print(set(df_IF['epoch']))
