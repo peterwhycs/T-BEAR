@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import mne
 import numpy as np
 import pandas as pd
@@ -9,7 +8,6 @@ from scipy.io import loadmat
 from sklearn import svm
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
 
 style.use("ggplot")
 
@@ -41,13 +39,13 @@ def load_subject_dir(file_path, mat_reject, mat_stage):
     else:
         pass
 
-    try:
-        sleep_file = loadmat(mat_stage)
-        sleep = sleep_file['stages'].flatten()
-        files['stages'] = sleep
-    except FileNotFoundError:
-        found_sleep = False
-        pass
+    # try:
+    #     sleep_file = loadmat(mat_stage)
+    #     sleep = sleep_file['stages'].flatten()
+    #     files['stages'] = sleep
+    # except FileNotFoundError:
+    #     found_sleep = False
+    #     pass
 
     try:
         reject_file = loadmat(mat_reject)
@@ -72,10 +70,10 @@ def clean_df(df):
     """Cleans dataframe by reseting index, deleting non-essential features, etc.
 
     Arguments:
-        df (DataFrame): The freshly converted dataframe.
+        df (pandas.DataFrame): The epochs file converted to a dataframe.
 
     Returns:
-        DataFrame: Returns a dataframe containing all files that did not error.
+        pandas.DataFrame: Returns a dataframe containing all files that did not error.
     """
     print("Cleaning data...")
 
@@ -102,6 +100,13 @@ def clean_df(df):
 
 
 def resize_reject(reject_array, r=2000):
+    """Resizes reject file array to match the number of epochs.
+    Arguments:
+        reject_array (numpy.ndarray): The freshly converted dataframe.
+
+    Returns:
+        numpy.ndarray: Returns a resized list with each element repeated r times respectively.
+    """
     repeated_reject_array = np.repeat(reject_array, r)
     return repeated_reject_array
 
@@ -124,40 +129,24 @@ def extract_df_values(df):
     return df_values
 
 
-def run_IForest(df, df_, reject):
+def run_IForest(X=X, y=y, df_=df):
     print("Running IForest algorithm...")
-
-    # Select values from dataframe
-    df_values = extract_df_values(df)
-    X = df_values
-    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001,
-                            bootstrap=False, n_jobs=3, random_state=42, verbose=1)
+    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001, bootstrap=False, n_jobs=3, random_state=42, verbose=1)
     clfIF.fit(X)
-
     pred_artifacts = clfIF.predict(X)
-    count_artifacts = np.unique(ar=pred_artifacts, return_counts=True)
     index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
-
     df_IF = df_.loc[index_artifacts]
-    df_IF_epochs = set(df_IF['epoch'])
-    print(df_IF_epochs)
-
-    num_artifacts_pair = count_artifacts[1][0]
-    num_artifacts = num_artifacts_pair[1][1]
-
-    total_pts = count_artifacts[1][1]
-    total_artifacts = np.count_nonzero(reject)
     print("IForest algorithm ran successfully!\n")
-    print(set(df_IF['epoch']))
+    return df_IF
 
 
-def run_SVM(df, reject):
-    df_values = extract_df_values(df)
-    # SVM Classifier:
-    print("Running SVM Classifier..")
-    X_train, y_train = df_values, reject
-    clfSVC = svm.SVC(kernel='linear', C=1.0)
-    clfSVC.fit(X_train, y_train)
-    y_pred = clfSVC.predict(X_train)
-    acc_score = accuracy_score(y_train, y_pred)
-    print('Accuracy Score:', acc_score)
+# def run_SVM(df, reject):
+#     df_values = extract_df_values(df)
+#     # SVM Classifier:
+#     print("Running SVM Classifier..")
+#     X_train, y_train = df_values, reject
+#     clfSVC = svm.SVC(kernel='linear', C=1.0)
+#     clfSVC.fit(X_train, y_train)
+#     y_pred = clfSVC.predict(X_train)
+#     acc_score = accuracy_score(y_train, y_pred)
+#     print('Accuracy Score:', acc_score)
