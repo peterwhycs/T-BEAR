@@ -3,13 +3,9 @@ from pathlib import Path
 import mne
 import numpy as np
 import pandas as pd
-from matplotlib import style
 from scipy.io import loadmat
 from sklearn import svm
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import accuracy_score
-
-style.use("ggplot")
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage):
@@ -50,8 +46,9 @@ def load_subject_dir(file_path, mat_reject, mat_stage):
     try:
         reject_file = loadmat(mat_reject)
         rejects = reject_file['reject'].flatten()
-        rejects_ = resize_reject(rejects)
-        files['reject'] = rejects_
+        # rejects_ = resize_reject(rejects)
+        # files['reject'] = rejects_
+        files['reject'] = rejects
     except FileNotFoundError:
         found_reject = False
         pass
@@ -131,7 +128,7 @@ def extract_df_values(df):
 
 def run_IForest(X, y, df_):
     print("Running IForest algorithm...")
-    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.001, bootstrap=False, n_jobs=3, random_state=42, verbose=1)
+    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.002, bootstrap=False, n_jobs=3, random_state=42, verbose=0)
     clfIF.fit(X)
     pred_artifacts = clfIF.predict(X)
     index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
