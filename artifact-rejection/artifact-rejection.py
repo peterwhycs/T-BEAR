@@ -3,6 +3,7 @@
 
 from utilities import *
 
+
 def main():
     # Set file paths and load files
     file_path = Path(
@@ -30,10 +31,13 @@ def main():
     X, y = df_values.values, reject
     df_IF = run_IForest(X, y, df)
 
-    # Create .csv with rejected <#> epochs
-    drop_epochs = sorted(list(set(df_IF['epoch'])))
-    drop_epochs_ = np.asarray(drop_epochs)
-    drop_epochs_.tofile('pred_y.csv',sep=',',format='%f')
+    # Create reject array .csv file
+    y_pred_reject = reject_epochs(df, df_IF)
+    y_pred_= np.asarray(y_pred_reject)
+    y_pred_.tofile('y_pred.csv',sep=',',format='%1f')
+    acc_score = accuracy_score(reject, y_pred_)
+    print(acc_score)
+
 
 if __name__ == "__main__":
     main()
