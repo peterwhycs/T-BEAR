@@ -24,7 +24,7 @@ def main():
     index, scaling_time, scalings = ['epoch', 'time'], 1e3, dict(grad=1e13)
     df_read = epochs.to_data_frame(picks=None, scalings=scalings, scaling_time=scaling_time, index=index)
     df = clean_df(df_read)
-    df_ = df.copy()
+    # df_ = df.copy()
 
     # Select values from dataframe and reject file
     df_values = extract_df_values(df)
@@ -37,7 +37,7 @@ def main():
     y_pred_.tofile('y_pred.csv',sep=',',format='%1f')
     acc_score = accuracy_score(reject, y_pred_)
     print(acc_score)
-    
+
 
 if __name__ == "__main__":
     main()
