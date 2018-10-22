@@ -128,7 +128,7 @@ def extract_df_values(df):
 
 def run_IForest(X, y, df):
     print("Running IForest algorithm...")
-    clfIF = IsolationForest(n_estimators=100, max_samples='auto', contamination=0., max_features=1.0, bootstrap=False, n_jobs=None, behaviour='new', random_state=42, verbose=0)
+    clfIF = IsolationForest(n_estimators=100, max_samples='auto', contamination=0., max_features=1.0, bootstrap=False, n_jobs=3, random_state=42, verbose=0)
     clfIF.fit(X)
     pred_artifacts = clfIF.predict(X)
     index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
