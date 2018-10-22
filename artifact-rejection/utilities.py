@@ -126,15 +126,28 @@ def extract_df_values(df):
     return df_values
 
 
-def run_IForest(X, y, df_):
+def run_IForest(X, y, df):
     print("Running IForest algorithm...")
-    clfIF = IsolationForest(n_estimators=80, max_samples='auto', contamination=0.002, bootstrap=False, n_jobs=3, random_state=42, verbose=0)
+    clfIF = IsolationForest(n_estimators=100, max_samples='auto', contamination=0., max_features=1.0, bootstrap=False, n_jobs=None, behaviour='new', random_state=42, verbose=0)
     clfIF.fit(X)
     pred_artifacts = clfIF.predict(X)
     index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
-    df_IF = df_.loc[index_artifacts]
+    df_IF = df.loc[index_artifacts]
     print("IForest algorithm ran successfully!\n")
     return df_IF
+
+
+def reject_epochs(df, df_IF):
+    all_epochs, reject_epochs = sorted(list(df['epoch'])), sorted(list(set(df_IF['epoch'])))
+    reject_all_epochs = [int(1) if epoch in reject_epochs else int(0) for epoch in all_epochs]
+    return reject_all_epochs
+
+
+# def reject_arr(df, df_IF):
+#     df['artifact'] = 0
+#     reject_index = sorted(list(df_IF.index))
+#     df_ = df.loc[reject_index,'artifact'] = 1
+#     return list(df_['artifact'])
 
 
 # def run_SVM(df, reject):
