@@ -37,7 +37,7 @@ def main():
     y_pred_.tofile('y_pred.csv',sep=',',format='%1f')
     acc_score = accuracy_score(reject, y_pred_)
     print(acc_score)
-
+    
 
 if __name__ == "__main__":
     main()
