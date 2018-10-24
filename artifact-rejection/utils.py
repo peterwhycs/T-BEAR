@@ -4,9 +4,9 @@ import mne
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
-from sklearn.svm import SVC
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import accuracy_score
+from sklearn.svm import SVC
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage, reject_scaling=False):

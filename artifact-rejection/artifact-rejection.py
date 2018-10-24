@@ -23,7 +23,7 @@ def main():
     epoch_3d_array = epochs.get_data()
 
     X, y = epoch_3d_array, rejects
-    y_pred = run_SVM(epoch_3d_array, rejects):
+    y_pred = run_SVM(epoch_3d_array, rejects)
 
     # Create .csv file with rejected <#> epochs
     y_pred.tofile('y_pred.csv', sep=',', format='%0f')
