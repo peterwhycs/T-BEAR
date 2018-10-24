@@ -6,7 +6,7 @@ import pandas as pd
 from scipy.io import loadmat
 from sklearn.svm import SVC
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import accuracy_score, score
+from sklearn.metrics import accuracy_score
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage, reject_scaling=False):
@@ -181,7 +181,5 @@ def run_SVM(epoch_3d, rejects):
     clfSVC.fit(X, y)
     y_pred = clfSVC.predict(X)
     acc_score = accuracy_score(y, y_pred, normalize=True, sample_weight=None)
-    score = score(y, y_pred)
     print('Accuracy Score (Normalized):', acc_score)
-    print('Accuracy SCore:', score)
     return y_pred
