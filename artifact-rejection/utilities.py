@@ -179,8 +179,9 @@ def run_IForest(X, y, df):
 def run_SVM(epoch_3d, rejects):
     print("Running SVM Classifier..")
     X, y = epoch_3d, rejects
-    clfSVC = SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.0, kernel='rbf', max_iter=-1,
-                 probability=False, shrinking=True, tol=0.001, verbose=False)
+    clfSVC = SVC(C=1.0, kernel=’rbf’, degree=3, gamma='auto', coef0=0.0, shrinking=True, 
+                 probability=False, tol=0.001, cache_size=1024, class_weight=None, verbose=False, 
+                 max_iter=-1, decision_function_shape='ovo', random_state=42)
     clfSVC.fit(X, y)
     y_pred = clfSVC.predict(X)
     acc_score = accuracy_score(y, y_pred, normalize=True, sample_weight=None)
