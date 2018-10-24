@@ -169,13 +169,6 @@ def run_IForest(X, y, df):
     return df_IF
 
 
-# def reject_arr(df, df_IF):
-#     df['artifact'] = 0
-#     reject_index = sorted(list(df_IF.index))
-#     df_ = df.loc[reject_index,'artifact'] = 1
-#     return list(df_['artifact'])
-
-
 def run_SVM(epoch_3d, rejects):
     print("Running SVM Classifier..")
     X, y = epoch_3d, rejects
