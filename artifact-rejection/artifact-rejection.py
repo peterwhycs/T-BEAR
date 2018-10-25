@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from utilities import *
+from utils import *
 
 
 def main():
@@ -20,12 +20,17 @@ def main():
     except:
         pass
 
-    epoch_3d_array = epochs.get_data()
-    X, y = epoch_3d_array, rejects
-    y_pred = run_SVM(X, y)
+    # Clean data
+    index, scaling_time, scalings = ['epoch', 'time'], 1e3, dict(grad=1e13)
+    df = epochs.to_data_frame(picks=None, scalings=scalings, scaling_time=scaling_time, index=index)
+    df_epochs = df.groupby('epoch').mean()
+    X, y = df_epochs.values, rejects
 
-    # Create .csv file with rejected <#> epochs
-    y_pred.tofile('y_pred.csv', sep=',', format='%0f')
+    # Run algorithm
+    y_pred = run_SVC(X, y)
+
+    # Create .txt file with value 0 or 1 (reject) for each epoch
+    np.savetxt('y_pred.txt', y_pred, fmt='%d', delimiter=',')
 
 
 if __name__ == "__main__":
