@@ -41,3 +41,5 @@ scratch/
 sdist/
 target/
 var/
+y_pred.csv
+y_pred.txt
