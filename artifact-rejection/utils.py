@@ -186,6 +186,7 @@ def run_SVC(values, rejects):
     clfSVC = SVC(C=1.0, random_state=42)
     clfSVC.fit(X, y)
     y_pred = clfSVC.predict(X)
-    acc_score = accuracy_score(y, y_pred, normalize=True, sample_weight=None)
+    acc_score = accuracy_score(rejects, y_pred, normalize=True, sample_weight=None)
+    acc_score_ = accuracy_score(rejects, y_pred, normalize=False)
     print('Accuracy Score (Normalized):', acc_score)
     return y_pred
