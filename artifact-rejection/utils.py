@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from scipy.io import loadmat
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, zero_one_loss
 from sklearn.svm import LinearSVC, SVC
 
 
@@ -180,13 +180,22 @@ def run_LinearSVC(epoch_3d, rejects):
     return y_pred
 
 
-def run_SVC(values, rejects):
+def run_SVC(df_values, rejects):
     print("Running SVM Classifier..")
-    X, y = values, rejects
-    clfSVC = SVC(C=1.0, random_state=42)
-    clfSVC.fit(X, y)
+    X, y_true = df_values, rejects
+    clfSVC = SVC(C=1.0, gamma='auto', random_state=42)
+    clfSVC.fit(X, y_true)
     y_pred = clfSVC.predict(X)
-    acc_score = accuracy_score(rejects, y_pred, normalize=True, sample_weight=None)
-    acc_score_ = accuracy_score(rejects, y_pred, normalize=False)
-    print('Accuracy Score (Normalized):', acc_score)
+    acc_score = accuracy_score(y_true, y_pred, normalize=True, sample_weight=None)
+    acc_score_ = accuracy_score(y_true, y_pred, normalize=False)
+    miss_score = zero_one_loss(y_true, y_pred, normalize=True, sample_weight=None)
+    miss_score_ = zero_one_loss(y_true, y_pred, normalize=False)
+    print('Number of Correctly Classified Samples:', acc_score_)
+    print('Fraction of Correctly Classified Samples(Normalized):', acc_score)
+
+    print('Number of Misclassifications:', miss_score_)
+    print('Fraction of Misclassifications:', miss_score)
+
+    prec_score = precision_score(y_true, y_pred, average='binary')
+    print('Precision Score:', prec_score)
     return y_pred
