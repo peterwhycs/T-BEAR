@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.io import loadmat
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import f1_score, recall_score
+from sklearn.metrics import average_precision_score, f1_score, precision_score, recall_score
 from sklearn.svm import SVC
 from tpot import TPOTClassifier
 
