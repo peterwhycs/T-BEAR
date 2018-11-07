@@ -49,8 +49,6 @@ pylint==2.1.1
 pyparsing==2.3.0
 python-dateutil==2.7.5
 pytz==2018.7
-pywin32==224
-pywinpty==0.5.4
 pyzmq==17.1.2
 qtconsole==4.4.2
 requests==2.20.0
