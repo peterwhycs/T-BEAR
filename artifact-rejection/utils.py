@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
+import sys
 from pathlib import Path
 
 import mne
@@ -8,8 +10,9 @@ import numpy as np
 import pandas as pd
 from scipy.io import loadmat
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import accuracy_score, precision_score, zero_one_loss
-from sklearn.svm import LinearSVC, SVC
+from sklearn.metrics import f1_score, recall_score
+from sklearn.svm import SVC
+from tpot import TPOTClassifier
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage, reject_scaling=False):
@@ -199,3 +202,9 @@ def run_SVC(df_values, rejects):
     prec_score = precision_score(y_true, y_pred, average='binary')
     print('Precision Score:', prec_score)
     return y_pred
+
+
+def run_SVC_(df_values, rejects):
+    """Runs SVM Classifier on all sample points per epoch, using rejection for epochs.
+    """
+    return None
