@@ -10,9 +10,21 @@ import numpy as np
 import pandas as pd
 from scipy.io import loadmat
 from sklearn.ensemble import IsolationForest
-from sklearn.metrics import average_precision_score, f1_score, precision_score, recall_score
-from sklearn.svm import SVC
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import (average_precision_score, f1_score, precision_score, recall_score)
+from sklearn.svm import SVC, LinearSVC
 from tpot import TPOTClassifier
+
+
+def resize_reject(reject_array, r=2000):
+    """Resizes reject file array to match the number of epochs.
+    Arguments:
+        reject_array (numpy.ndarray): The freshly converted dataframe.
+    Returns:
+        numpy.ndarray: Returns a resized list with each element repeated r times respectively.
+    """
+    repeated_reject_array = np.repeat(reject_array, r)
+    return repeated_reject_array
 
 
 def load_subject_dir(file_path, mat_reject, mat_stage, reject_scaling=False):
@@ -122,89 +134,3 @@ def extract_df_values(df):
     df_values = df_[value_columns]
     print("Data prepared successfully!\n")
     return df_values
-
-
-def resize_reject(reject_array, r=2000):
-    """Resizes reject file array to match the number of epochs.
-    Arguments:
-        reject_array (numpy.ndarray): The freshly converted dataframe.
-
-    Returns:
-        numpy.ndarray: Returns a resized list with each element repeated r times respectively.
-    """
-    repeated_reject_array = np.repeat(reject_array, r)
-    return repeated_reject_array
-
-
-def reject_epochs(reject_index, epochs, df):
-    """Converts sampled rejection array into epoched rejection array.
-
-        Arguments:
-            reject_index (numpy.ndarray): An array of the indices of sample points that were flagged as artifacts.
-            epochs (int): The total number of epochs.
-            df (pandas.DataFrame): The dataframe prior to machine learning algorithm.
-
-        Returns:
-            numpy.ndarray: Returns an array with y_pred, rejected sample points, mapped to corresponding epochs.
-
-        Examples:
-            >>> import numpy as np
-            >>> y_pred = np.array([1, 1, 1, 0, ... , 0])  # Sample y_pred where 1s represent rejections
-            >>> y_pred_epochs = reject_epochs(y_pred, reject_index, num_epochs, df)
-            >>> y_pred_epochs  # All sample points belong to the first epoch, or epoch 0
-            np.array([1, 0, ... , 0])
-    """
-    epoch_array, epoch_index = np.zeros(epochs), np.asarray(sorted(set(df.loc[reject_index, 'epoch'].values)))
-    for index in epoch_index:
-        epoch_array[index] = 1
-    return epoch_array
-
-
-def run_IForest(X, y, df):
-    print("Running IForest algorithm...")
-    clfIF = IsolationForest(n_estimators=100, max_samples=1, contamination=0.003,
-                            max_features=1.0, bootstrap=False, n_jobs=2, random_state=42, verbose=0)
-    clfIF.fit(X)
-    pred_artifacts = clfIF.predict(X)
-    index_artifacts = [i for i, x in enumerate(pred_artifacts) if x == -1]
-    df_IF = df.loc[index_artifacts]
-    print("IForest algorithm ran successfully!\n")
-    return df_IF
-
-
-def run_LinearSVC(epoch_3d, rejects):
-    print("Running SVM Classifier..")
-    X, y = epoch_3d, rejects
-    clfSVC = LinearSVC(C=1.0, random_state=42)
-    clfSVC.fit(X, y)
-    y_pred = clfSVC.predict(X)
-    acc_score = accuracy_score(y, y_pred, normalize=True, sample_weight=None)
-    print('Accuracy Score (Normalized):', acc_score)
-    return y_pred
-
-
-def run_SVC(df_values, rejects):
-    print("Running SVM Classifier..")
-    X, y_true = df_values, rejects
-    clfSVC = SVC(C=1.0, gamma='auto', random_state=42)
-    clfSVC.fit(X, y_true)
-    y_pred = clfSVC.predict(X)
-    acc_score = accuracy_score(y_true, y_pred, normalize=True, sample_weight=None)
-    acc_score_ = accuracy_score(y_true, y_pred, normalize=False)
-    miss_score = zero_one_loss(y_true, y_pred, normalize=True, sample_weight=None)
-    miss_score_ = zero_one_loss(y_true, y_pred, normalize=False)
-    print('Number of Correctly Classified Samples:', acc_score_)
-    print('Fraction of Correctly Classified Samples(Normalized):', acc_score)
-
-    print('Number of Misclassifications:', miss_score_)
-    print('Fraction of Misclassifications:', miss_score)
-
-    prec_score = precision_score(y_true, y_pred, average='binary')
-    print('Precision Score:', prec_score)
-    return y_pred
-
-
-def run_SVC_(df_values, rejects):
-    """Runs SVM Classifier on all sample points per epoch, using rejection for epochs.
-    """
-    return None
