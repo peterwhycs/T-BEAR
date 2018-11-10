@@ -27,28 +27,26 @@ def main():
         'Rew_703_rest': ['F4', 'F7', 'F8', 'Fp2', 'T3', 'T4', 'T6'],
         'Rew_704_rest': ['C3'],
         'Rew_706_rest': ['T4']
-        }
+    }
 
+    # Add file name and paths to dictionary
     for sub in sub_folders:
         files = os.listdir(Path(sub))
         temp_sub_files = dict()
         for file in files:
             file_path = os.path.join(Path(sub), file)
+            temp_sub_files['id'] = str(sub)
             if 'epoch' in file:
                 temp_sub_files['epoch'] = file_path
             if 'reject' in file:
-                 temp_sub_files['reject'] = file_path
+                temp_sub_files['reject'] = file_path
             elif 'stages' in file:
                 temp_sub_files['stage'] = file_path
         subjects.append(temp_sub_files)
 
-    three_fourth = int((len(subjects) * 0.75) // 1)
-
-    x_train = subjects[:three_fourth]
-    x_test = subjects[three_fourth:]
-
     # Initialize classifier
-    clfSVC = LinearSVC(penalty='l2', loss='hinge', dual=True, tol=0.0001, C=10.0, multi_class='ovr', fit_intercept=True, intercept_scaling=1, class_weight=None, verbose=1, random_state=42, max_iter=1000)
+    clfSVC = LinearSVC(penalty='l2', loss='hinge', dual=True, tol=0.0001, C=10.0, multi_class='ovr', fit_intercept=True,
+                       intercept_scaling=1, class_weight=None, verbose=1, random_state=42, max_iter=1000)
 
     # Model training
     for sub_ in x_train:
@@ -74,6 +72,11 @@ def main():
             pass
 
         df_epochs = df.groupby('epoch').mean()
+        tscv = TimeSeriesSplit(n_splits=3)
+        for train_index, test_index in tscv.split(df_epochs):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+
         X, y = df_epochs.values, rejects
         X, y_true = X, y
         clfSVC.fit(X, y_true)

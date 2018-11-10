@@ -11,8 +11,9 @@ import pandas as pd
 from scipy.io import loadmat
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import (average_precision_score, f1_score, precision_score, recall_score)
-from sklearn.svm import SVC, LinearSVC
+from sklearn.metrics import average_precision_score, f1_score, precision_score, recall_score
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.svm import LinearSVC, SVC
 from tpot import TPOTClassifier
 
 
@@ -86,7 +87,7 @@ def load_subject_dir(file_path, mat_reject, mat_stage, reject_scaling=False):
 
 
 def clean_df(df):
-    """Cleans dataframe by reseting index, deleting non-essential features, etc.
+    """Cleans dataframe by resetting index, deleting non-essential features, etc.
 
     Arguments:
         df (pandas.DataFrame): The epochs file converted to a dataframe.
@@ -116,6 +117,13 @@ def clean_df(df):
 
     print("Cleaned data successfully!\n")
     return df
+
+
+def bad_channel_median(bad_chan, clean_df):
+    for channel in bad_chan:
+        if channel in clean_df.columns:
+            clean_df[channel] = np.median(clean_df[channel])
+    return clean_df
 
 
 def extract_df_values(df):
