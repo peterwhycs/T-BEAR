@@ -5,13 +5,8 @@ from utils import *
 
 
 def main():
-    # Load researcher and subject folders
-    subjects = list()
-    stephanie_folder = Path("C:\\Users\\peter\\git\\EEG-artifact-rejection\\artifact-rejection\\eeg-data\\Stephanie")
-    sub_folders = [os.path.join(stephanie_folder, file) for file in os.listdir(stephanie_folder)]
-
     # Use the median for each of the bad channels
-    stephanie_bad_chan = {
+    bad_channels_stephanie = {
         'Rew_605_rest': ['Fp1', 'Fp2'],
         'Rew_609_rest': ['F3', 'F7', 'Fp1'],
         'Rew_611_rest': ['Fp2', 'T3'],
@@ -29,36 +24,36 @@ def main():
         'Rew_706_rest': ['T4']
     }
 
-    # Add file name and paths to dictionary
-    for sub in sub_folders:
-        files = os.listdir(Path(sub))
-        temp_sub_files = dict()
+    # Load researcher and subject folders
+    stephanie_folder = Path("C:\\Users\\peter\\git\\EEG-artifact-rejection\\artifact-rejection\\eeg-data\\Stephanie")
+    sub_folders = [[file, os.path.join(stephanie_folder, file)] for file in os.listdir(stephanie_folder)]
+    train_sub_folders , test_sub_folders = train_test_split(sub_folders)
+
+    subjects = dict()
+    for sub in train_sub_folders:
+        sub_id, path_ = sub[0], sub[1]
+        files = os.listdir(Path(path_))
+        sub_files = dict()
         for file in files:
-            file_path = os.path.join(Path(sub), file)
-            temp_sub_files['id'] = str(sub)
+            full_path = os.path.join(Path(path_), file)
             if 'epoch' in file:
-                temp_sub_files['epoch'] = file_path
+                sub_files['epoch'] = full_path
             if 'reject' in file:
-                temp_sub_files['reject'] = file_path
+                sub_files['reject'] = full_path
             elif 'stages' in file:
-                temp_sub_files['stage'] = file_path
-        subjects.append(temp_sub_files)
+                sub_files['stage'] = full_path
+        subjects[sub_id] = sub_files
 
-    # Initialize classifier
-    clfSVC = LinearSVC(penalty='l2', loss='hinge', dual=True, tol=0.0001, C=10.0, multi_class='ovr', fit_intercept=True,
-                       intercept_scaling=1, class_weight=None, verbose=1, random_state=42, max_iter=1000)
-
-    # Model training
-    for sub_ in x_train:
-        file_path = sub_['epoch']
-        mat_reject = sub_['reject']
-        mat_stage = sub_['stage']
+    epoched_dataframes = list()
+    for sub_ in subjects.keys():
+        file_path = subjects[sub_]['epoch']
+        mat_reject = subjects[sub_]['reject']
+        mat_stage = subjects[sub_]['stage']
 
         files = load_subject_dir(file_path, mat_reject, mat_stage)
         epochs = files['epochs']
         rejects = files['rejects']
 
-        # Clean data
         index, scaling_time, scalings = ['epoch', 'time'], 1e3, dict(grad=1e13)
         df = epochs.to_data_frame(
             picks=None, scalings=scalings, scaling_time=scaling_time, index=index)
@@ -69,29 +64,47 @@ def main():
             df_epochs['stage'] = stages
         except Exception as ex:
             print(ex)
-            pass
 
-        df_epochs = df.groupby('epoch').mean()
-        tscv = TimeSeriesSplit(n_splits=3)
-        for train_index, test_index in tscv.split(df_epochs):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
+        try:
+            df_epochs = bad_channel_median(bad_channels_stephanie[sub_], df_epochs)
+        except Exception as ex:
+            print(ex)
 
-        X, y = df_epochs.values, rejects
-        X, y_true = X, y
-        clfSVC.fit(X, y_true)
+        epoched_dataframes.append([df_epochs, rejects])
 
-    # Model testing
-    for sub__ in x_test:
-        file_path = sub__['epoch']
-        mat_reject = sub__['reject']
-        mat_stage = sub__['stage']
+    clfSVC = SVC(C=1.0, kernel='poly', gamma='auto_deprecated', coef0=1.0, shrinking=True, probability=False,
+                 tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr',
+                 random_state=42)
+
+    for pair in epoched_dataframes:
+        X_train, y_train = pair[0], pair[1]
+        clfSVC.fit(X_train, y_train)
+
+    test_subjects = dict()
+    for sub_test in test_sub_folders:
+        sub_id, path_ = sub_test[0], sub_test[1]
+        files = os.listdir(Path(path_))
+        sub_files = dict()
+        for file in files:
+            full_path = os.path.join(Path(path_), file)
+            if 'epoch' in file:
+                sub_files['epoch'] = full_path
+            if 'reject' in file:
+                sub_files['reject'] = full_path
+            elif 'stages' in file:
+                sub_files['stage'] = full_path
+        test_subjects[sub_id] = sub_files
+
+    epoched_dataframes_ = list()
+    for sub_test_ in test_subjects.keys():
+        file_path = test_subjects[sub_test_]['epoch']
+        mat_reject = test_subjects[sub_test_]['reject']
+        mat_stage = test_subjects[sub_test_]['stage']
 
         files = load_subject_dir(file_path, mat_reject, mat_stage)
         epochs = files['epochs']
         rejects = files['rejects']
 
-        # Clean data
         index, scaling_time, scalings = ['epoch', 'time'], 1e3, dict(grad=1e13)
         df = epochs.to_data_frame(
             picks=None, scalings=scalings, scaling_time=scaling_time, index=index)
@@ -102,15 +115,28 @@ def main():
             df_epochs['stage'] = stages
         except Exception as ex:
             print(ex)
-            pass
 
-        df_epochs = df.groupby('epoch').mean()
-        X, y = df_epochs.values, rejects
-        X, y_true = X, y
-        y_pred = clfSVC.predict(X)
+        try:
+            df_epochs = bad_channel_median(bad_channels_stephanie[file_path], df_epochs)
+        except Exception as ex:
+            print(ex)
 
-        print("\tRecall: %1.3f" % recall_score(y_true, y_pred))
-        print("\tF1: %1.3f\n" % f1_score(y_true, y_pred))
+        epoched_dataframes_.append([df_epochs, rejects])
+
+    clf_f1_score, clf_precision_score, clf_recall_score = list(), list(), list()
+    for pair_test in epoched_dataframes_:
+        X_test, y_test = pair_test[0], pair_test[1]
+        y_pred = clfSVC.predict(X_test)
+        clf_precision_score += [precision_score(y_test, y_pred)]
+        clf_recall_score += [recall_score(y_test, y_pred)]
+
+    print('Recall Scores:')
+    for scr in clf_recall_score:
+        print(scr)
+
+    print('\nPrecision Scores:')
+    for scr in clf_precision_score:
+        print(scr)
 
 
 if __name__ == "__main__":

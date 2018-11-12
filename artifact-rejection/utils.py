@@ -8,12 +8,12 @@ from pathlib import Path
 import mne
 import numpy as np
 import pandas as pd
-from scipy.io import loadmat
+from scipy.io import loadmat, savemat
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import average_precision_score, f1_score, precision_score, recall_score
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.svm import LinearSVC, SVC
+from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 from tpot import TPOTClassifier
 
 
