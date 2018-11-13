@@ -25,7 +25,8 @@ def main():
     }
 
     # Load researcher and subject folders
-    stephanie_folder = Path("C:\\Users\\peter\\git\\EEG-artifact-rejection\\artifact-rejection\\eeg-data\\Stephanie")
+    
+    stephanie_folder = Path("/home/walker/peterwhy/git/EEG-artifact-rejection/artifact-rejection/eeg-data/Stephanie")
     sub_folders = [[file, os.path.join(stephanie_folder, file)] for file in os.listdir(stephanie_folder)]
     train_sub_folders , test_sub_folders = train_test_split(sub_folders)
 
