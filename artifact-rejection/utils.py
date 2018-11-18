@@ -12,7 +12,7 @@ from scipy.io import loadmat, savemat
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import f1_score, precision_score, recall_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import TimeSeriesSplit, train_test_split
 from sklearn.svm import SVC
 
 
