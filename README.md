@@ -22,5 +22,5 @@ This ongoing process explores the efficacy of using SVM and Isolation Forest to 
 ### Key Challenges
   - The labels for artifacts are only mapped per epoch, but the sampling rate produces up to hundreds of data points per epoch.
   - Depending on the chosen algorithm, feature selection process, etc., the machine learning model might take more than a *reasonable* amount of RAM and time just for the training dataset.
-  - The target value for the [recall score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html) >= 0.85 while maintaining a [precision score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score) > 0.60.
+  - The target value for the [recall score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html) >= 0.85 while maintaining a [precision score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score) > 0.50.
     - Even though detecting and removing artifacts are extremely important, the rejection process should not jeopardize signals of interest.
