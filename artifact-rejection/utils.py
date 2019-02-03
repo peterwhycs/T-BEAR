@@ -18,6 +18,7 @@ from sklearn.svm import SVC
 
 def resize_reject(reject_array, r=2000):
     """Resizes reject file array to match the number of epochs.
+
     Arguments:
         reject_array (numpy.ndarray): The freshly converted dataframe.
     Returns:
