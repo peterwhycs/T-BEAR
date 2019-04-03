@@ -11,10 +11,10 @@ This ongoing process explores supervised learning methods to detect artifacts in
 ### Dependencies
 
 - **Anaconda**: within the `tbear` directory containing the file `environment.yml` perform:
+  - Problems may arise with Windows users.
 ```
 conda env create -f environment.yml
 ```
-  - Problems may arise with Windows users.
 
 - **pip**
 ```
