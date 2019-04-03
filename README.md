@@ -1,26 +1,66 @@
-# EEG Artifact Rejection
+# Time-Based EEG Artifact Rejection (T-BEAR)
 
-The Jupyter notebook(s) and script(s) in the *EEG-artifact-rejection* repository are prototypes for a more automated process in detecting and rejecting EEG artifacts.
+Automated process for detecting and rejecting EEG artifacts.
 
-## Usage
+## Description
 
-This ongoing process explores the efficacy of using SVM and Isolation Forest to detect artifacts in EEG data and possibly other time series.
+This ongoing process explores supervised learning methods to detect artifacts in EEG data and possibly other time series.
 
-## Background Information
-### Datasets
-  - Unfortunately, the datasets used for training and testing cannot be publicly released due to privacy reasons.
-  - The prototype is currently in development for [The Walker Sleep and Neuroimaging Lab (Center for Human Sleep Science)](https://vcresearch.berkeley.edu/research-unit/center-human-sleep-science), led by [Professor Matthew Walker](https://vcresearch.berkeley.edu/faculty/matthew-walker), at UC Berkeley. Please reach out to Matthew Walker for any questions, comments, and/or concerns.
+## Getting Started
 
-### Possible Approaches
-  - Isolation Forest
-    - [Isolation Forest](https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)
-  - SVM Classifier or SVC
-  - Other comprehensive approaches:
-    - [A Review on Machine Learning Algorithms in Handling EEG Artifacts](http://www.es.mdh.se/pdf_publications/3562.pdf)
-    - [Automated EEG artifact elimination by applying machine learning algorithms to ICA-based features](http://iopscience.iop.org/article/10.1088/1741-2552/aa69d1/meta)
+### Dependencies
 
-### Key Challenges
-  - The labels for artifacts are only mapped per epoch, but the sampling rate produces up to hundreds of data points per epoch.
-  - Depending on the chosen algorithm, feature selection process, etc., the machine learning model might take more than a *reasonable* amount of RAM and time just for the training dataset.
-  - The target value for the [recall score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html) >= 0.85 while maintaining a [precision score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score) > 0.50.
-    - Even though detecting and removing artifacts are extremely important, the rejection process should not jeopardize signals of interest.
+- **Anaconda**: within the `tbear` directory containing the file `environment.yml` perform:
+```
+conda env create -f environment.yml
+```
+  - Problems may arise with Windows users.
+
+- **pip**
+```
+pip install numpy scipy matplotlib pandas scikit-learn mne
+```
+
+<!-- ### Installing
+
+* How/where to download your program
+* Any modifications needed to be made to files/folders -->
+
+<!-- ### Executing program
+
+* How to run the program
+* Step-by-step bullets
+```
+code blocks for commands
+``` -->
+
+<!-- ## Help
+
+Any advise for common problems or issues.
+```
+command to run if program contains helper info
+``` -->
+<!--
+## Authors
+
+Contributors names and contact info
+
+ex. Dominique Pizzie
+ex. [@DomPizzie](https://twitter.com/dompizzie) -->
+
+<!-- ## Version History
+
+* 0.2
+    * Various bug fixes and optimizations
+    * See [commit change]() or See [release history]()
+* 0.1
+    * Initial Release -->
+
+## License
+
+This project is licensed under the Apache License - see the [LICENSE](./LICENSE) file for details
+
+## Acknowledgments
+
+Inspiration, code snippets, etc.
+* [MNE](https://martinos.org/mne/stable/index.html)
