@@ -104,14 +104,11 @@ venv.bak/
 .mypy_cache/
 
 # Other
-artifact-rejection/__pycache__/
-artifact-rejection/data
-artifact-rejection/eeg-data.zip
-artifact-rejection/eeg-data/
-data/
-eeg-data.zip
-eeg-data/**
+*.csv
+.vscode
 Pipfile
 Pipfile.lock
-y_pred.csv
-y_pred.txt
+data/
+docs/
+notebooks/
+tests/
