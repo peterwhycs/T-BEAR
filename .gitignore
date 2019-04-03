@@ -105,6 +105,7 @@ venv.bak/
 
 # Other
 *.csv
+.idea/
 .vscode
 Pipfile
 Pipfile.lock
