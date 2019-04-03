@@ -25,7 +25,7 @@ class SetFile:
         self.scaled = scaled
         self.pca_transform = pca_transform
 
-    def pca_transform(self, standard_scaler=True) -> np.ndarray:
+    def pca_transform(self, standard_scaler: bool = True) -> np.ndarray:
         if not self.scaled:
             self.epoch = scale_data(self.epoch, standard=standard_scaler)
         self.epoch = pca_transform(self.epoch)
