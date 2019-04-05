@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # =============================================================================
-"""High-level functions to build functions/methods for Class SetFile in core.py.
+"""High-level functions to build functions/methods for Class Subject in core.py.
 """
 # =============================================================================
 
@@ -44,7 +44,3 @@ def pca_transform(dataset: np.ndarray,
     pca = PCA(n_components=n_components, random_state=random_state)
     transformed_data = pca.fit_transform(dataset)
     return transformed_data
-
-
-def train_model_file_kfold(model: Any, X: np.ndarray, Y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
-    pass
