@@ -8,7 +8,6 @@
 from pathlib import Path
 from typing import Tuple
 
-import numpy as np
 from sklearn.decomposition import PCA
 
 from helpers import *
