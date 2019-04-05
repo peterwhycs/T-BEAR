@@ -57,7 +57,7 @@ def visualize_pca_component(expl_var_ratio: np.ndarray) -> None:
     plt.show()
 
 
-def train_model(model: Any, X: np.ndarray, y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
+def train_model_split(model: Any, X: np.ndarray, y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
     model.fit(X_train, y_train)
     test_score = model.score(X_test, y_train)
