@@ -5,11 +5,17 @@
 """
 # =============================================================================
 
+from pathlib import Path
 from typing import Tuple
 
+import numpy as np
 from sklearn.decomposition import PCA
 
 from helpers import *
+
+
+def get_file_name(file_path: str) -> str:
+    return Path(file_path).resolve().stem
 
 
 def load_epoch_reject_files(abs_file_path: str,
@@ -31,10 +37,10 @@ def find_pca_component(scaled_data: np.ndarray,
                        visual: bool = False,
                        random_state: int = RANDOM_STATE) -> int:
     pca = PCA(random_state=random_state).fit(scaled_data)
-    expl_var_ratio = np.cumsum(pca.explained_variance_ratio_)
+    explained_var_ratio = np.cumsum(pca.explained_variance_ratio_)
     if visual:
-        visualize_pca_component(expl_var_ratio)
-    n_components = np.argwhere(expl_var_ratio > 0.90)
+        visualize_pca_component(explained_var_ratio)
+    n_components = np.argwhere(explained_var_ratio > 0.90)
     return n_components[0]
 
 
