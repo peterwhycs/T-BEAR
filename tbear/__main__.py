@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__all__ = ('main',)
+__all__ = ("main",)
 
 import sys
 
@@ -12,5 +12,5 @@ def main(args=None):
         args = sys.argv[1:]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
