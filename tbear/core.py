@@ -41,9 +41,9 @@ class Subject:
     def train_model(clf: Any, subject_arr: np.ndarray, reject_arr: np.ndarray,
                     kfold: bool = False, random_state: int = RANDOM_STATE) -> Any:
         if not kfold:
-            return train_model_split(clf, subject_arr, reject_arr, random_state=RANDOM_STATE)
+            return train_model_split(clf, subject_arr, reject_arr, random_state=random_state)
         else:
-            return train_model_kfold(clf, subject_arr, reject_arr, random_state=RANDOM_STATE)
+            return train_model_kfold(clf, subject_arr, reject_arr, random_state=random_state)
 
     @staticmethod
     def predict_model(clf: Any, subject_arr: np.ndarray) -> np.ndarray:
