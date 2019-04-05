@@ -1,42 +1,50 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # =============================================================================
-"""Class SetFile methods fort T-BEARS tha could be used by public user.
+"""Class Subject methods fort T-BEARS tha could be used by public user.
 """
 # =============================================================================
 
 from common import *
 
 
-class SetFile:
+class Subject:
+    subject_group = []
+    reject_files = []
+
     def __init__(self,
-                 epoch_file_path: str,
+                 subject_file_path: str,
                  reject_file_path: str,
                  name: str = None,
-                 scaled: bool = True,
-                 pca_transform: bool = False) -> None:
+                 scaled: bool = False) -> None:
         if not name:
             self.name = ""
         else:
             self.name = name
-        epoch_array, reject_array = load_epoch_reject_files(epoch_file_path, reject_file_path)
-        self.epoch = epoch_array
-        self.reject = reject_array
+        subject_arr, reject_arr = load_epoch_reject_files(subject_file_path, reject_file_path)
+        self.subject = subject_arr
+        self.reject = reject_arr
         self.scaled = scaled
-        self.pca_transform = pca_transform
 
     def pca_transform(self, standard_scaler: bool = True) -> np.ndarray:
         if not self.scaled:
-            self.epoch = scale_data(self.epoch, standard=standard_scaler)
-        self.epoch = pca_transform(self.epoch)
-        self.scaled = self.pca_transform = True
-        return self.epoch
+            self.subject = scale_data(self.subject, standard=standard_scaler)
+        self.subject = pca_transform(self.subject)
+        self.scaled = True
+        return self.subject
+
+    def add_to_group(self):
+        Subject.subject_group.append(self.subject)
+        Subject.reject_files.append(self.reject)
 
     @staticmethod
-    def train_model(clf: Any, set_file_array: np.ndarray, reject_file: np.ndarray, kfold_mode: bool = False,
-                    random_state: int = RANDOM_STATE) -> Any:
-        pass
+    def train_model(clf: Any, subject_arr: np.ndarray, reject_arr: np.ndarray,
+                    kfold: bool = False, random_state: int = RANDOM_STATE) -> Any:
+        if not kfold:
+            return train_model_split(clf, subject_arr, reject_arr, random_state=RANDOM_STATE)
+        else:
+            return train_model_kfold(clf, subject_arr, reject_arr, random_state=RANDOM_STATE)
 
     @staticmethod
-    def predict_reject(clf: Any, set_file_array: np.ndarray) -> np.ndarray:
-        return clf.predict(set_file_array)
+    def predict_model(clf: Any, subject_arr: np.ndarray) -> np.ndarray:
+        return clf.predict(subject_arr)
