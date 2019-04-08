@@ -111,7 +111,8 @@ Pipfile
 Pipfile.lock
 data/
 docs/
-notebooks/
+notebooks/1-Single_File_Workflow-Copy1.ipynb
+notebooks/2-Directory_Workflow.ipynb
 tests/data/
 tests/test_common.py
 tests/test_core.py
