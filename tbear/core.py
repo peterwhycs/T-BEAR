@@ -34,9 +34,10 @@ class Subject:
         return str(self.name)
 
     def pca_transform(self, standard_scaler: bool = True) -> np.ndarray:
+        self.subject = reshape_data_2d(self.subject)
         if not self.scaled:
             self.subject = scale_data(self.subject, standard=standard_scaler)
-        self.subject = pca_transform(self.subject)
+        self.subject = pca_transform_default(self.subject)
         self.scaled = True
         return self.subject
 
