@@ -23,10 +23,6 @@ class TestHelpers(unittest.TestCase):
         reject_file = load_reject_mat(self.reject_path)
         self.assertTrue(type(reject_file), np.ndarray)
 
-    def test_reshape_2d(self):
-        reshaped_arr = reshape_data_2d(self.file)
-        self.assertEqual(len(reshaped_arr.shape), 2)
-
     def tearDown(self):
         self.epoch_path = None
         self.file = None
