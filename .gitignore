@@ -112,4 +112,6 @@ Pipfile.lock
 data/
 docs/
 notebooks/
-tests/
+tests/data/
+tests/test_common.py
+tests/test_core.py
