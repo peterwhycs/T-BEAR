@@ -11,11 +11,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 import scipy.io as sio
-from mne import read_epochs_eeglab
+from mne import read_epochs_eeglab, set_config, set_log_level
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 RANDOM_STATE: int = 42
+set_config('MNE_LOGGING_LEVEL', 'ERROR')
+set_log_level('ERROR')
 
 
 def load_epoch_set(abs_epoch_path: str) -> np.ndarray:

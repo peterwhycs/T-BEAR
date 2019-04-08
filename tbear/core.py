@@ -7,6 +7,10 @@
 
 from common import *
 
+RANDOM_STATE: int = 42
+set_config('MNE_LOGGING_LEVEL', 'ERROR')
+set_log_level('ERROR')
+
 
 class Subject:
     subject_group = []

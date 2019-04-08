@@ -12,6 +12,10 @@ from sklearn.decomposition import PCA
 
 from helpers import *
 
+RANDOM_STATE: int = 42
+set_config('MNE_LOGGING_LEVEL', 'ERROR')
+set_log_level('ERROR')
+
 
 def get_file_name(file_path: str) -> str:
     return Path(file_path).resolve().stem
