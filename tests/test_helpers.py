@@ -10,7 +10,7 @@ from helpers import *
 class TestHelpers(unittest.TestCase):
     """Basic low-level function test cases."""
 
-    def setUp(self) -> None:
+    def setUp(self):
         self.epoch_path = os.path.realpath(os.path.join("data", "test_file_epoch.set"))
         self.file = read_epochs_eeglab(self.epoch_path).get_data()[:2324]
         self.reject_path = os.path.realpath(os.path.join("data", "test_reject.mat"))

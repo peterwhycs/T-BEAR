@@ -22,13 +22,16 @@ class Subject:
                  name: str = None,
                  scaled: bool = False) -> None:
         if not name:
-            self.name = ""
+            self.name = get_file_name(subject_file_path)
         else:
             self.name = name
         subject_arr, reject_arr = load_epoch_reject_files(subject_file_path, reject_file_path)
         self.subject = subject_arr
         self.reject = reject_arr
         self.scaled = scaled
+
+    def __str__(self) -> str:
+        return str(self.name)
 
     def pca_transform(self, standard_scaler: bool = True) -> np.ndarray:
         if not self.scaled:
@@ -37,9 +40,10 @@ class Subject:
         self.scaled = True
         return self.subject
 
-    def add_to_group(self):
-        Subject.subject_group.append(self.subject)
-        Subject.reject_files.append(self.reject)
+    @classmethod
+    def add_to_group(cls, subject):
+        Subject.subject_group.append(subject.subject)
+        Subject.reject_files.append(subject.reject)
 
     @staticmethod
     def train_model(clf: Any, subject_arr: np.ndarray, reject_arr: np.ndarray,
