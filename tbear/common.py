@@ -10,6 +10,7 @@ from typing import Any, Tuple
 
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+from sklearn.metrics import f1_score
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 
@@ -71,8 +72,9 @@ def pca_transform_default(dataset: np.ndarray,
 def train_model_split(model: Any, X: np.ndarray, y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
     model.fit(X_train, y_train)
-    test_score = model.score(X_test, y_test)
-    print(f"Test Score: {test_score}")
+    y_pred = model.predict(X_test)
+    f1 = f1_score(y_test, y_pred)
+    print(f"Test Score: {f1}")
     return model
 
 
@@ -84,6 +86,8 @@ def train_model_kfold(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
         model.fit(X_train, y_train)
-        kfold_scores.append(model.score(X_test, y_test))
-    print(f"Test Scores: {kfold_scores}")
+        y_pred = model.predict(X_test)
+        f1 = f1_score(y_test, y_pred)
+        kfold_scores.append(f1)
+    print(f"Test Scores: {f1}")
     return model
