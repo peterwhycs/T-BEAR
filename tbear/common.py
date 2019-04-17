@@ -74,7 +74,7 @@ def train_model_split(model: Any, X: np.ndarray, y: np.ndarray, random_state: in
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     f1 = f1_score(y_test, y_pred)
-    print(f"Test Score: {f1}")
+    print(f"F1 Score: {f1}")
     return model
 
 
@@ -89,5 +89,5 @@ def train_model_kfold(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 
         y_pred = model.predict(X_test)
         f1 = f1_score(y_test, y_pred)
         kfold_scores.append(f1)
-    print(f"Test Scores: {f1}")
+    print(f"F1 Score: {kfold_scores}")
     return model
