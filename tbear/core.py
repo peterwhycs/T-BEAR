@@ -20,12 +20,13 @@ class Subject:
                  subject_file_path: str,
                  reject_file_path: str,
                  name: str = None,
+                 resample: int = 200,
                  scaled: bool = False) -> None:
         if not name:
             self.name = get_file_name(subject_file_path)
         else:
             self.name = name
-        subject_arr, reject_arr = load_epoch_reject_files(subject_file_path, reject_file_path)
+        subject_arr, reject_arr = load_epoch_reject_files(subject_file_path, reject_file_path, resample=resample)
         self.subject = subject_arr
         self.reject = reject_arr
         self.scaled = scaled
@@ -37,8 +38,9 @@ class Subject:
         self.subject = reshape_data_2d(self.subject)
         if not self.scaled:
             self.subject = scale_data(self.subject, standard=standard_scaler)
+            self.scaled = True
         self.subject = pca_transform_default(self.subject)
-        self.scaled = True
+
         return self.subject
 
     @classmethod

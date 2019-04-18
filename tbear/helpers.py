@@ -5,8 +5,8 @@
 """
 # =============================================================================
 
+import mne
 import numpy as np
-import scipy
 import scipy.io as sio
 from mne import read_epochs_eeglab, set_config, set_log_level
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -16,14 +16,13 @@ set_config('MNE_LOGGING_LEVEL', 'ERROR')
 set_log_level('ERROR')
 
 
-def load_epoch_set(abs_epoch_path: str) -> np.ndarray:
+def load_epoch_set(abs_epoch_path: str) -> mne.Epochs:
     epoch_file = read_epochs_eeglab(abs_epoch_path)
-    file = epoch_file.get_data()
-    return file
+    return epoch_file
 
 
 def load_reject_mat(abs_reject_path: str) -> np.ndarray:
-    reject_file = scipy.io.loadmat(abs_reject_path)["reject"].flatten()
+    reject_file = sio.loadmat(abs_reject_path)['reject'].flatten()
     return reject_file
 
 
