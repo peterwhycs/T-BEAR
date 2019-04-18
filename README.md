@@ -2,9 +2,41 @@
 
 Automated process for detecting and rejecting EEG artifacts.
 
+## Table of Contents
+
 ## Description
 
 This ongoing process explores supervised learning methods to detect artifacts in EEG data and possibly other time series.
+
+### Challenges:
+  - Current models are often task specific
+  - Feature engineering & selection
+  - High dimensionality
+  - High variability between subjects
+  - Low signal-to-noise ratio
+  - Non-stationary signal
+
+### Possible Prototypes:
+  - **Machine Learning**
+    - Supervised:
+      - Random Forest Classifier/Regressor
+      - Support Vector Classifier/Machine
+
+    - Unsupervised:
+      - Isolation Forest
+
+  - **Deep Learning**
+    - Supervised:
+      - Convolutional Neural Network (CNN)*
+      - Recurrent Neural Network (RNN)
+
+\*CNN will be our goal for the final model.
+
+### Performance Metrics:
+  - F1 Score
+  - Precision
+  - Recall
+  - AUC-ROC Curve
 
 ## Getting Started
 
@@ -12,13 +44,16 @@ This ongoing process explores supervised learning methods to detect artifacts in
 
 - **Anaconda**: within the `tbear` directory containing the file `environment.yml` perform:
   - Problems may arise with Windows users.
+
 ```
 conda env create -f environment.yml
 ```
 
+
 - **pip**
+
 ```
-pip install numpy scipy matplotlib pandas scikit-learn mne
+pip install numpy scipy matplotlib pandas scikit-learn jupyter mne
 ```
 
 <!-- ### Installing
@@ -63,4 +98,5 @@ This project is licensed under the Apache License - see the [LICENSE](./LICENSE)
 ## Acknowledgments
 
 Inspiration, code snippets, etc.
-* [MNE](https://martinos.org/mne/stable/index.html)
+* [Gramfort, M. Luessi, E. Larson, D. Engemann, D. Strohmeier, C. Brodbeck, L. Parkkonen, M. Hämäläinen, MNE software for processing MEG and EEG data, NeuroImage, Volume 86, 1 February 2014, Pages 446-460, ISSN 1053-811](https://martinos.org/mne/stable/index.html)
+* [Roy, Yannick & Banville, Hubert & Albuquerque, Isabela & Gramfort, Alexandre & Faubert, Jocelyn. (2019). Deep learning-based electroencephalography analysis: a systematic review.](https://arxiv.org/pdf/1901.05498.pdf)
