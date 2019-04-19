@@ -53,7 +53,7 @@ conda env create -f environment.yml
 - **pip**
 
 ```
-pip install numpy scipy matplotlib pandas scikit-learn jupyter mne
+pip install numpy scipy matplotlib pandas scikit-learn jupyter mne tensorflow
 ```
 
 <!-- ### Installing
