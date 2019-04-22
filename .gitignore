@@ -103,14 +103,19 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# Data directory
+data/*
+tbear/tests/data/
+
+# Exception to the rule
+!data/.gitkeep
+
 # Other
 *.csv
 .idea/
 .vscode
 Pipfile
 Pipfile.lock
-data/new-data/
-data/old-data/
 docs/
 notebooks/1-Single_File_Workflow-Copy1.ipynb
 notebooks/2-Directory_Workflow.ipynb
