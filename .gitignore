@@ -109,12 +109,14 @@ venv.bak/
 .vscode
 Pipfile
 Pipfile.lock
-data/
+data/new-data/
+data/old-data/
 docs/
 notebooks/1-Single_File_Workflow-Copy1.ipynb
 notebooks/2-Directory_Workflow.ipynb
 notebooks/Convolutional_Neural_Network_Model.ipynb
 notebooks/Preprocessing_and_Feature_Engineering_Feature_Selection.ipynb
+tests/
 tests/data/
 tests/test_common.py
 tests/test_core.py
