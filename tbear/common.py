@@ -28,7 +28,18 @@ def get_file_name(file_path: str) -> str:
 
 def load_epoch_reject_files(abs_file_path: str,
                             abs_reject_path: str,
-                            resample) -> Tuple[np.ndarray, np.ndarray]:
+                            resample: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+    """Load subject's EEG epoched file and reject array file while resampling to 200 Hz.
+
+    Args:
+        abs_file_path: The subject's EEG epoched file path.
+        abs_reject_path: The subject's artifact reject array.
+        resample: An option to resample to 200 Hz. Defaults to True.
+
+    Returns:
+        Tuple: The loaded files with index 0 as the subject's EEG file and index 1 as the reject array.
+
+    """
     epoch_file = load_epoch_set(abs_file_path).resample(resample, npad='auto').get_data()
     reject_file = load_reject_mat(abs_reject_path)
     return epoch_file, reject_file
