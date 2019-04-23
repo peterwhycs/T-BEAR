@@ -123,5 +123,7 @@ notebooks/Convolutional_Neural_Network_Model.ipynb
 notebooks/Preprocessing_and_Feature_Engineering_Feature_Selection.ipynb
 setup.py
 tbear/__main__.py
+tbear/predict_model.py
 tbear/tests/test_common.py
 tbear/tests/test_core.py
+tbear/train_model.py
