@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # Data directory
+*.csv
 data/*
 tbear/tests/data/
 
@@ -111,7 +112,6 @@ tbear/tests/data/
 !data/.gitkeep
 
 # Other
-*.csv
 .idea/
 .vscode
 Pipfile
@@ -122,6 +122,6 @@ notebooks/2-Directory_Workflow.ipynb
 notebooks/Convolutional_Neural_Network_Model.ipynb
 notebooks/Preprocessing_and_Feature_Engineering_Feature_Selection.ipynb
 setup.py
-tbear/tests/data/
+tbear/__main__.py
 tbear/tests/test_common.py
 tbear/tests/test_core.py
