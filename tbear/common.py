@@ -10,12 +10,11 @@ from typing import Any, Tuple
 
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from helpers import *
 from sklearn.decomposition import PCA
 from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
-
-from helpers import *
 
 RANDOM_STATE: int = 42
 set_config('MNE_LOGGING_LEVEL', 'ERROR')
