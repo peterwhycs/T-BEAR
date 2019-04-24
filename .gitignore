@@ -118,6 +118,7 @@ Pipfile
 Pipfile.lock
 docs/
 notebooks/
+notebooks/1-Single_File_Workflow.ipynb
 notebooks/1-Single_File_Workflow-Copy1.ipynb
 notebooks/2-Directory_Workflow.ipynb
 notebooks/Convolutional_Neural_Network_Model.ipynb
