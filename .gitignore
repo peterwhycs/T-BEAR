@@ -117,13 +117,11 @@ tbear/tests/data/
 Pipfile
 Pipfile.lock
 docs/
+notebooks/
 notebooks/1-Single_File_Workflow-Copy1.ipynb
 notebooks/2-Directory_Workflow.ipynb
 notebooks/Convolutional_Neural_Network_Model.ipynb
 notebooks/Preprocessing_and_Feature_Engineering_Feature_Selection.ipynb
+notebooks/archives
 setup.py
-tbear/__main__.py
-tbear/predict_model.py
-tbear/tests/test_common.py
-tbear/tests/test_core.py
-tbear/train_model.py
+tbear/tests/
