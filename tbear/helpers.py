@@ -1,44 +1,99 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # =============================================================================
-"""Helper functions used mostly to build high-level functions in common.py.
+"""Architectural code for bootstrapping components and developer ergonomics.
 """
 # =============================================================================
 
-import mne
+from pathlib import Path
+from typing import Any
+
+import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
-from mne import read_epochs_eeglab, set_config, set_log_level
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import tensorflow as tf
+from mne import set_config, set_log_level
+from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
+from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
 
 RANDOM_STATE: int = 42
 set_config('MNE_LOGGING_LEVEL', 'ERROR')
 set_log_level('ERROR')
 
 
-def load_epoch_set(abs_epoch_path: str) -> mne.Epochs:
-    epoch_file = read_epochs_eeglab(abs_epoch_path)
-    return epoch_file
+def get_name(file_path: str) -> str:
+    path_str = Path(file_path).resolve().stem
+    path_str = path_str.replace('_epoch', '')
+    path_str = path_str.replace('epoch', '')
+    path_str = path_str.replace('_reject', '')
+    path_str = path_str.replace('reject', '')
+    return path_str
 
 
-def load_reject_mat(abs_reject_path: str) -> np.ndarray:
-    reject_file = sio.loadmat(abs_reject_path)['reject'].flatten()
-    return reject_file
+def visualize_pca_component(expl_var_ratio: np.ndarray) -> None:
+    # Plot the Cumulative Summation of the Explained Variance
+    plt.figure()
+    plt.plot(expl_var_ratio)
+    plt.xlabel("Number of Components")
+    plt.ylabel("Variance (%)")
+    plt.title("Explained Variance")
+    plt.show()
 
 
-def min_max_scale(dataset: np.ndarray) -> np.ndarray:
-    scaler = MinMaxScaler(feature_range=[0, 1])
-    scaled_data = scaler.fit_transform(dataset)
-    return scaled_data
+def train_model_split(model: Any, X: np.ndarray, y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
+
+    X_train = tf.keras.utils.normalize(X_train, axis=1)
+    X_test = tf.keras.utils.normalize(X_test, axis=1)
+
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    f1 = f1_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_pred)
+
+    print(f"F1 Score: {f1}")
+    print(f"Precision Score: {precision}")
+    print(f"Recall Score: {recall}")
+    print(f"ROC-AOC Score: {roc_auc}")
+
+    return model
 
 
-def reshape_data_2d(dataset: np.ndarray) -> np.ndarray:
-    num_epochs, num_features, samples_per_epoch = dataset.shape
-    dataset = dataset.reshape((num_epochs, num_features * samples_per_epoch))
-    return dataset
+def train_model_kfold(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 3,
+                      random_state: int = RANDOM_STATE) -> Any:
+    kf = KFold(n_splits=n_splits, random_state=random_state, shuffle=False)
+    f1_kfold_scores = []
+    pre_kfold_scores = []
+    rec_kfold_scores = []
+    roc_auc_kfold_scores = []
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
 
+        X_train = tf.keras.utils.normalize(X_train, axis=1)
+        X_test = tf.keras.utils.normalize(X_test, axis=1)
 
-def standard_scale(dataset: np.ndarray) -> np.ndarray:
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(dataset)
-    return scaled_data
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+
+        f1 = f1_score(y_test, y_pred)
+        f1_kfold_scores.append(f1)
+
+        precision = precision_score(y_test, y_pred)
+        pre_kfold_scores.append(precision)
+
+        recall = recall_score(y_test, y_pred)
+        rec_kfold_scores.append(recall)
+
+        roc_auc = roc_auc_score(y_test, y_pred)
+        roc_auc_kfold_scores.append(roc_auc)
+
+    print(f"F1 Scores: {f1_kfold_scores}")
+    print(f"Precision Scores: {pre_kfold_scores}")
+    print(f"Recall Scores: {rec_kfold_scores}")
+    print(f"ROC-AOC Scores: {roc_auc_kfold_scores}")
+
+    return model
