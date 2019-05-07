@@ -3,9 +3,10 @@
 
 from setuptools import setup
 
-setup(name='tbear',
+setup(name='T-BEAR',
       version='0.1.0',
-      packages=['tbear'],
+      packages=['tbear',],
+      description=''
       entry_points={
           'console_scripts': [
               'tbear = tbear.__main__:main']

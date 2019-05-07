@@ -18,22 +18,23 @@ class Subject:
             self.name = get_name(subject_file_path)
         else:
             self.name = name
-        epoch_file, reject_file = load_epoch_reject(subject_file_path, reject_file_path)
-        self.epochs = epoch_file
-        self.reject = reject_file
+
+        self.epoch_path = subject_file_path
+        self.reject_path = reject_file_path
+
+    def __repr__(self) -> str:
+        return 'Subject(' + self.name + ')'
 
     def __str__(self) -> str:
         return str(self.name)
 
-
-def dir_to_subjects(dir_epochs: str, dir_rejects) -> List[Subject]:
-    dir_lst = []
-    epoch_files = sorted(os.listdir(dir_epochs))
-    reject_files = sorted(os.listdir(dir_rejects))
-
-    for e, r in zip(epoch_files, reject_files):
-        epoch = os.path.abspath(os.path.join(dir_epochs, e))
-        reject = os.path.abspath(os.path.join(dir_rejects, r))
-        dir_lst.append(Subject(epoch, reject))
-
-    return dir_lst
+    @staticmethod
+    def dir_to_subs(dir_epoch: str, dir_rej: str) -> List['Subject']:
+        group = []
+        epoch_files = sorted(os.listdir(dir_epoch))
+        reject_files = sorted(os.listdir(dir_rej))
+        for e, r in zip(epoch_files, reject_files):
+            epoch = os.path.abspath(os.path.join(dir_epoch, e))
+            reject = os.path.abspath(os.path.join(dir_rej, r))
+            group.append(Subject(epoch, reject))
+        return group

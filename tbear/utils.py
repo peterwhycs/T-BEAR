@@ -9,11 +9,10 @@ from typing import Tuple
 
 import mne
 import scipy.io as sio
+from helpers import *
 from mne import read_epochs_eeglab
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
-from helpers import *
 
 RANDOM_STATE: int = 42
 set_config('MNE_LOGGING_LEVEL', 'ERROR')

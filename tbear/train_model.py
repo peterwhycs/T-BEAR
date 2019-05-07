@@ -9,7 +9,6 @@ import os
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-
 from utils import train_model_ml
 
 RANDOM_STATE: int = 42

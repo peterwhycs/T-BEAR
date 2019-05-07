@@ -10,11 +10,10 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow as tf
+from keras.utils import normalize
 from mne import set_config, set_log_level
 from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
-from sklearn.model_selection import KFold
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold, train_test_split
 
 RANDOM_STATE: int = 42
 set_config('MNE_LOGGING_LEVEL', 'ERROR')
@@ -43,8 +42,8 @@ def visualize_pca_component(expl_var_ratio: np.ndarray) -> None:
 def train_model_split(model: Any, X: np.ndarray, y: np.ndarray, random_state: int = RANDOM_STATE) -> Any:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
 
-    X_train = tf.keras.utils.normalize(X_train, axis=1)
-    X_test = tf.keras.utils.normalize(X_test, axis=1)
+    X_train = normalize(X_train, axis=1)
+    X_test = normalize(X_test, axis=1)
 
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
@@ -73,8 +72,8 @@ def train_model_kfold(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
-        X_train = tf.keras.utils.normalize(X_train, axis=1)
-        X_test = tf.keras.utils.normalize(X_test, axis=1)
+        X_train = normalize(X_train, axis=1)
+        X_test = normalize(X_test, axis=1)
 
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
