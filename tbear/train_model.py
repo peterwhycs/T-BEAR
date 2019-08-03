@@ -9,7 +9,7 @@ import os
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from utils import train_model_ml
+from utils.utils import train_model_ml
 
 RANDOM_STATE: int = 42
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))

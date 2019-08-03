@@ -8,7 +8,7 @@
 import os
 from typing import List
 
-from utils import *
+from utils.utils import *
 
 
 class Subject:
